@@ -27,6 +27,11 @@
     <string name="mock_server_has_token">Mock server has refresh token?</string>
     <string name="request_server_auth_code">Request server auth code?</string>
     <string name="configuration_error">Error: the value of WEB_CLIENT_ID or SERVER_BASE_URL is not  set correctly. This will cause errors when requesting a server auth code.</string>
-
+    <string name="gcm_defaultSenderId">default</string>
+    <string name="registering_message">Generating InstanceID token</string>
+    <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to send downstream messages to this app.</string>
+    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
+        sending the fetched token to the server or subscribing to the PubSub topic. Please try
+        running the sample again.</string>
 
 </resources>

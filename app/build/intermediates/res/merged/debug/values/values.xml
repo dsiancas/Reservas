@@ -329,6 +329,8 @@
     <string name="decline">Decline</string>
     <!-- From: file:/C:/UBI/Reservas/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="gcm_defaultSenderId">default</string>
+    <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to send downstream messages to this app.</string>
     <string name="hello_world">Hello world!</string>
     <string name="mock_server_has_token">Mock server has refresh token?</string>
     <!-- From: file:/C:/UBI/Reservas/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.0.0/res/values/values.xml -->
@@ -347,6 +349,7 @@
     <eat-comment/>
     <string name="play_services_error">Google Play services is not available.  This application will close.</string>
     <string name="profile_picture">User\'s profile picture.</string>
+    <string name="registering_message">Generating InstanceID token</string>
     <string name="request_server_auth_code">Request server auth code?</string>
     <string name="revoke_access_button_name">Revoke</string>
     <string name="sign_out_button_name">Sign out</string>
@@ -369,6 +372,9 @@
     <string name="store_picture_title">Save image</string>
     <!-- From: file:/C:/UBI/Reservas/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
+        sending the fetched token to the server or subscribing to the PubSub topic. Please try
+        running the sample again.</string>
     <string name="unknown_person">Unknown</string>
     <!-- From: file:/C:/UBI/Reservas/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.5.0/res/values/wallet_strings.xml -->
     <eat-comment/>

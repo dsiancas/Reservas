@@ -21,11 +21,17 @@ import com.google.android.gms.plus.model.people.PersonBuffer;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender.SendIntentException;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,6 +39,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -134,11 +141,40 @@ public class MainActivity extends FragmentActivity implements
 	private ArrayAdapter<String> mCirclesAdapter;
 	private ArrayList<String> mCirclesList;
 
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private ProgressBar mRegistrationProgressBar;
+    private TextView mInformationTextView;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        /**/
+        mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    mInformationTextView.setText(getString(R.string.gcm_send_message));
+                } else {
+                    mInformationTextView.setText(getString(R.string.token_error_message));
+                }
+            }
+        };
+        mInformationTextView = (TextView) findViewById(R.id.informationTextView);
 
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+        /**/
 		mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
 		mSignOutButton = (Button) findViewById(R.id.sign_out_button);
 		mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
@@ -199,6 +235,20 @@ public class MainActivity extends FragmentActivity implements
             mGoogleApiClient.disconnect();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -580,5 +630,20 @@ public class MainActivity extends FragmentActivity implements
 
             dialog.show();
         }
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }

@@ -17,20 +17,17 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="96dp"
-        android:text="Reservar Sala" />
+        android:text="Reservar Sala"
+        android:layout_below="@+id/welcome"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button2"
+        android:text="Confirmar Sala"
         android:layout_below="@+id/button2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:text="Confirmar Sala" />
+        android:layout_alignStart="@+id/button2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +42,24 @@
         android:text="Salir"
         android:id="@+id/logout"
         android:layout_below="@+id/button3"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="@string/registering_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/informationTextView"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/logout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="43dp" />
+        android:layout_marginTop="47dp" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/registrationProgressBar"
+        android:layout_below="@+id/informationTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="47dp" />
 
 </RelativeLayout><!-- From: file:/C:/UBI/Reservas/app/src/main/res/layout/menu.xml -->

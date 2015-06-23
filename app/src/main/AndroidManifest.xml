@@ -70,11 +70,11 @@
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.example.gcm" />
+                <category android:name="com.example.prueba" />
             </intent-filter>
         </receiver>
         <service
-            android:name="com.example.prueba.GcmListener"
+            android:name="com.example.prueba.MyGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -86,6 +86,10 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
+        </service>
+        <service
+            android:name="com.example.prueba.RegistrationIntentService"
+            android:exported="false">
         </service>
         <meta-data
             android:name="com.google.android.gms.version"

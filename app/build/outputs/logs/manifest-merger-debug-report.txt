@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:2:1-95:12
+ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:2:1-99:12
 	package
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:3:5-33
 		INJECTED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml
@@ -151,7 +151,7 @@ uses-permission#com.google.android.c2dm.permission.RECEIVE
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:20:5-82
 	android:name
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:20:22-79
-android:uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:22:5-24:38
 MERGED from [com.google.android.gms:play-services-maps:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.5.0\AndroidManifest.xml:22:5-80
 MERGED from [com.google.android.gms:play-services-maps:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.5.0\AndroidManifest.xml:22:5-80
@@ -161,20 +161,20 @@ MERGED from [com.google.android.gms:play-services-maps:7.5.0] C:\UBI\Reservas\ap
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:24:9-35
 	android:name
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:23:9-65
-android:uses-permission#android.permission.READ_PHONE_STATE
-ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:25:5-83
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:25:5-75
 	android:name
-		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:25:30-80
-android:uses-permission#android.permission.READ_EXTERNAL_STORAGE
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:25:22-72
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:26:5-28:38
 	android:maxSdkVersion
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:28:9-35
 	android:name
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:27:9-64
-android:uses-permission#android.permission.READ_CALL_LOG
-ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:29:5-80
+uses-permission#android.permission.READ_CALL_LOG
+ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:29:5-72
 	android:name
-		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:29:30-77
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:29:22-69
 permission#com.example.prueba.permission.C2D_MESSAGE
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:31:5-32:47
 	android:protectionLevel
@@ -182,7 +182,7 @@ ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:31:5-32:47
 	android:name
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:31:17-73
 application
-ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:34:5-93:19
+ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:34:5-97:19
 MERGED from [com.android.support:gridlayout-v7:22.2.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\22.2.0\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:22.2.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:22.2.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\AndroidManifest.xml:22:5-20
@@ -330,22 +330,22 @@ ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:67:9-75:20
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:70:13-73
 	android:name
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:68:13-66
-intent-filter#com.example.gcm+com.google.android.c2dm.intent.RECEIVE
+intent-filter#com.example.prueba+com.google.android.c2dm.intent.RECEIVE
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:71:13-74:29
 action#com.google.android.c2dm.intent.RECEIVE
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:72:17-81
 	android:name
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:72:25-78
-category#com.example.gcm
-ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:73:17-60
+category#com.example.prueba
+ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:73:17-63
 	android:name
-		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:73:27-57
-service#com.example.prueba.GcmListener
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:73:27-60
+service#com.example.prueba.MyGcmListenerService
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:76:9-82:19
 	android:exported
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:78:13-37
 	android:name
-		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:77:13-58
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:77:13-67
 intent-filter#com.google.android.c2dm.intent.RECEIVE
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:79:13-81:29
 service#com.example.prueba.MyInstanceIDListenerService
@@ -360,8 +360,14 @@ action#com.google.android.gms.iid.InstanceID
 ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:87:17-79
 	android:name
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:87:25-77
+service#com.example.prueba.RegistrationIntentService
+ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:90:9-93:19
+	android:exported
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:92:13-37
+	android:name
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:91:13-72
 meta-data#com.google.android.gms.version
-ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:90:9-92:69
+ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:94:9-96:69
 MERGED from [com.google.android.gms:play-services-base:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\AndroidManifest.xml:21:9-23:69
 MERGED from [com.google.android.gms:play-services-base:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\AndroidManifest.xml:21:9-23:69
 MERGED from [com.google.android.gms:play-services-base:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\AndroidManifest.xml:21:9-23:69
@@ -390,9 +396,9 @@ MERGED from [com.google.android.gms:play-services-base:7.5.0] C:\UBI\Reservas\ap
 MERGED from [com.google.android.gms:play-services-base:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\AndroidManifest.xml:21:9-23:69
 MERGED from [com.google.android.gms:play-services-base:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\AndroidManifest.xml:21:9-23:69
 	android:value
-		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:92:13-66
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:96:13-66
 	android:name
-		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:91:13-58
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:95:13-58
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from [com.google.android.gms:play-services-ads:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.5.0\AndroidManifest.xml:21:5-78
 MERGED from [com.google.android.gms:play-services-analytics:7.5.0] C:\UBI\Reservas\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.5.0\AndroidManifest.xml:22:5-79

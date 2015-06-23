@@ -20,6 +20,8 @@ public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
+    String authorizedEntity = "92176027677"; // Project id from Google Developers Console
+    String scope = "GCM";
 
     public RegistrationIntentService() {
         super(TAG);
@@ -27,8 +29,9 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.i("dsa","dsadsadsadsdsdsdsds");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        Log.i("dsa","dsadsadsa");
         try {
             // In the (unlikely) event that multiple refresh operations occur simultaneously,
             // ensure that they are processed sequentially.
@@ -38,9 +41,18 @@ public class RegistrationIntentService extends IntentService {
                 // are local.
                 // [START get_token]
                 InstanceID instanceID = InstanceID.getInstance(this);
-                String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                //String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
+                //        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                String token = InstanceID.getInstance(this).getToken(authorizedEntity,scope);
                 // [END get_token]
+                /*for(int i=0; i<token.length(); i+=1024)
+                {
+                    if(i+1024<token.length())
+                        Log.d("JSON OUTPUT", token.substring(i, i+1024));
+                    else
+                        Log.d("JSON OUTPUT", token.substring(i, token.length()));
+                }
+                */
                 Log.i(TAG, "GCM Registration Token: " + token);
 
                 // TODO: Implement this method to send any registration to your app's servers.

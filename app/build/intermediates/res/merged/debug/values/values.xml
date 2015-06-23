@@ -329,7 +329,6 @@
     <string name="decline">Decline</string>
     <!-- From: file:/C:/UBI/Reservas/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="gcm_defaultSenderId">default</string>
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to send downstream messages to this app.</string>
     <string name="hello_world">Hello world!</string>
     <string name="mock_server_has_token">Mock server has refresh token?</string>

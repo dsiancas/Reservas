@@ -59,17 +59,12 @@ public class Menu extends Activity implements
         };
         mInformationTextView = (TextView) findViewById(R.id.informationTextView);
 
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
 
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-            Log.i("dsa", "aaaa");
-        }
              /**/
 
         mGoogleApiClient = buildGoogleApiClient();
 
+        ///
         //mGoogleApiClient.connect();
         /*
 		Button reservar = (Button) findViewById(R.id.button2);
@@ -180,6 +175,15 @@ public class Menu extends Activity implements
                     onSignedOut();
                 }
             });
+
+            if (checkPlayServices()) {
+                // Start IntentService to register this application with GCM.
+
+                Intent intent = new Intent(this, RegistrationIntentService.class);
+                intent.putExtra("name", currentUser.getDisplayName());
+                startService(intent);
+                Log.i("dsa", "aaaa");
+            }
         }
     }
 
@@ -211,4 +215,5 @@ public class Menu extends Activity implements
         }
         return true;
     }
+
 }

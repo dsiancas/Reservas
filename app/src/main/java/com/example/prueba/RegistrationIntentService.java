@@ -6,6 +6,8 @@ package com.example.prueba;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -14,7 +16,23 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.IOException;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import static com.google.android.gms.internal.zzhl.runOnUiThread;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -22,6 +40,12 @@ public class RegistrationIntentService extends IntentService {
     private static final String[] TOPICS = {"global"};
     String authorizedEntity = "92176027677"; // Project id from Google Developers Console
     String scope = "GCM";
+    String name;
+
+    HttpClient httpclient;
+    HttpPost httppost;
+    List<NameValuePair> nameValuePairs;
+    HttpResponse response;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -29,6 +53,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        name = intent.getStringExtra("name");
         Log.i("dsa","dsadsadsadsdsdsdsds");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.i("dsa","dsadsadsa");
@@ -86,9 +111,40 @@ public class RegistrationIntentService extends IntentService {
      *
      * @param token The new token.
      */
+
+    public static String remove2(String input) {
+        // Descomposición canónica
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        // Nos quedamos únicamente con los caracteres ASCII
+        Pattern pattern = Pattern.compile("\\P{ASCII}+");
+        return pattern.matcher(normalized).replaceAll("");
+    }//remove2
+
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        try{
+
+            httpclient=new DefaultHttpClient();
+            httppost= new HttpPost("http://ubika.tk/register2.php"); // make sure the url is correct.
+            //add your data
+            nameValuePairs = new ArrayList<NameValuePair>(2);
+            // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
+
+
+            nameValuePairs.add(new BasicNameValuePair("name",remove2(name)));  // $Edittext_value = $_POST['Edittext_value'];
+            nameValuePairs.add(new BasicNameValuePair("regid",token));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            //Execute HTTP Post Request
+            response=httpclient.execute(httppost);
+            // edited by James from coderzheaven.. from here....
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            final String response = httpclient.execute(httppost, responseHandler);
+            System.out.println("Response : " + response);
+
+        }catch(Exception e){
+            System.out.println("Exception : " + e.getMessage());
+        }
     }
+
 
     /**
      * Subscribe to any GCM topics of interest, as defined by the TOPICS constant.

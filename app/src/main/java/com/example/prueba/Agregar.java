@@ -1,12 +1,22 @@
 package com.example.prueba;
 
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +25,9 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
@@ -40,12 +52,19 @@ public class Agregar extends Activity implements
     private int mSignInProgress;
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
+    private Button send;
+
+    HttpClient httpclient2;
+    HttpPost httppost2;
+    List<NameValuePair> nameValuePairs2;
+    HttpResponse response2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.refer);
 
+        send = (Button) findViewById(R.id.button1);
         mCirclesList = new ArrayList<String>();
         mCirclesAdapter = new ArrayAdapter<String>(
                 this, R.layout.circle_member, mCirclesList);
@@ -58,6 +77,7 @@ public class Agregar extends Activity implements
         mactv.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
         mGoogleApiClient = buildGoogleApiClient();
+
 
 		//String result = getUsers();
 		//new Verify().execute();
@@ -120,6 +140,14 @@ public class Agregar extends Activity implements
         }
     }
 
+    public static String remove2(String input) {
+        // Descomposición canónica
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        // Nos quedamos únicamente con los caracteres ASCII
+        Pattern pattern = Pattern.compile("\\P{ASCII}+");
+        return pattern.matcher(normalized).replaceAll("");
+    }//remove2
+
     @Override
     public void onConnected(Bundle bundle) {
         if (!mGoogleApiClient.isConnecting()) {
@@ -127,6 +155,13 @@ public class Agregar extends Activity implements
             //Log.i("taag","dsadsa");
             Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
                     .setResultCallback(this);
+
+            send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new Notify().execute();
+                }
+            });
 
         }
     }
@@ -163,36 +198,48 @@ public class Agregar extends Activity implements
         }
     }
 
-    private class Verify extends AsyncTask<Void, Void, String> {
+    private class Notify extends AsyncTask<Void, Void, String> {
 
 		private String URL = "http://ubicom.pe.hu/getUsuarios.php";
-		AndroidHttpClient mClient = AndroidHttpClient.newInstance("");
-		
+
 		@Override
 		protected void onPreExecute() {
-			mactv.setEnabled(false);
+			//mactv.setEnabled(false);
 		}
 		
 		@Override
 		protected String doInBackground(Void... params) {
-			HttpGet request = new HttpGet(URL);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			try {
-				return mClient.execute(request,responseHandler);
-			} catch (ClientProtocolException exception) {
-				exception.printStackTrace();
-			} catch (IOException exception) {
-				exception.printStackTrace();
-			}
+            try{
+                httpclient2=new DefaultHttpClient();
+                httppost2= new HttpPost("http://ubika.tk/service.php"); // make sure the url is correct.
+                //add your data
+                nameValuePairs2 = new ArrayList<NameValuePair>(2);
+                // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
+
+
+                nameValuePairs2.add(new BasicNameValuePair("name","Daniel Jesus Siancas Salas"));  // $Edittext_value = $_POST['Edittext_value'];
+                nameValuePairs2.add(new BasicNameValuePair("regid","dsadsa"));
+                httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+                //Execute HTTP Post Request
+                response2=httpclient2.execute(httppost2);
+                // edited by James from coderzheaven.. from here....
+                ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                final String response = httpclient2.execute(httppost2, responseHandler);
+                System.out.println("Response : " + response);
+
+            }catch(Exception e){
+                System.out.println("Exception : " + e.getMessage());
+                e.printStackTrace();
+            }
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			Context context = getApplicationContext();
+			/*Context context = getApplicationContext();
 			Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
 			toast.show();	
-			mactv.setEnabled(true);
+			mactv.setEnabled(true);*/
 		}
 	}
 	
@@ -212,4 +259,6 @@ public class Agregar extends Activity implements
 		}
 		return null;
 	}
+
+
 }

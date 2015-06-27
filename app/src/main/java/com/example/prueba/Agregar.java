@@ -3,6 +3,7 @@ package com.example.prueba;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -28,7 +29,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -53,6 +56,7 @@ public class Agregar extends Activity implements
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private Button send;
+    private TimePicker tp;
 
     HttpClient httpclient2;
     HttpPost httppost2;
@@ -65,6 +69,7 @@ public class Agregar extends Activity implements
 		setContentView(R.layout.refer);
 
         send = (Button) findViewById(R.id.button1);
+        tp = (TimePicker) findViewById(R.id.timePicker1);
         mCirclesList = new ArrayList<String>();
         mCirclesAdapter = new ArrayAdapter<String>(
                 this, R.layout.circle_member, mCirclesList);
@@ -162,7 +167,6 @@ public class Agregar extends Activity implements
                     new Notify().execute();
                 }
             });
-
         }
     }
 
@@ -209,28 +213,35 @@ public class Agregar extends Activity implements
 		
 		@Override
 		protected String doInBackground(Void... params) {
+            String stringEditText = mactv.getText().toString();
+            //Log.i("dsadsa",stringEditText);
+            List<String> items = Arrays.asList(stringEditText.split("\\s*,\\s*"));
+            //items.add("Daniel Jesus Siancas Salas");
             try{
-                httpclient2=new DefaultHttpClient();
-                httppost2= new HttpPost("http://ubika.tk/service.php"); // make sure the url is correct.
-                //add your data
-                nameValuePairs2 = new ArrayList<NameValuePair>(2);
-                // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
 
+                for(String i: items) {
+                    httpclient2 = new DefaultHttpClient();
+                    httppost2 = new HttpPost("http://ubika.tk/service.php"); // make sure the url is correct.
+                    //add your data
+                    nameValuePairs2 = new ArrayList<NameValuePair>(2);
+                    // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
+                    String hour = tp.getCurrentHour().toString()+":"+ tp.getCurrentMinute().toString();
 
-                nameValuePairs2.add(new BasicNameValuePair("name","Daniel Jesus Siancas Salas"));  // $Edittext_value = $_POST['Edittext_value'];
-                nameValuePairs2.add(new BasicNameValuePair("regid","dsadsa"));
-                httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
-                //Execute HTTP Post Request
-                response2=httpclient2.execute(httppost2);
-                // edited by James from coderzheaven.. from here....
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                final String response = httpclient2.execute(httppost2, responseHandler);
-                System.out.println("Response : " + response);
-
+                    nameValuePairs2.add(new BasicNameValuePair("name", i));  // $Edittext_value = $_POST['Edittext_value'];
+                    nameValuePairs2.add(new BasicNameValuePair("hour", hour));
+                    httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+                    //Execute HTTP Post Request
+                    response2 = httpclient2.execute(httppost2);
+                    // edited by James from coderzheaven.. from here....
+                    ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                    final String response = httpclient2.execute(httppost2, responseHandler);
+                    System.out.println("Response : " + response);
+                }
             }catch(Exception e){
                 System.out.println("Exception : " + e.getMessage());
                 e.printStackTrace();
             }
+
 			return null;
 		}
 

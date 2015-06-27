@@ -7,8 +7,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.prueba"
-        minSdkVersion 17
-        targetSdkVersion 17
+        minSdkVersion 16
+        targetSdkVersion 16
     }
 
     buildTypes {

@@ -277,7 +277,7 @@ MERGED from [com.android.support:support-v4:22.2.0] C:\UBI\Reservas\app\build\in
 	android:allowBackup
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:35:9-35
 	android:icon
-		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:36:9-45
+		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:36:9-38
 	android:theme
 		ADDED from C:\UBI\Reservas\app\src\main\AndroidManifest.xml:38:9-40
 activity#com.example.prueba.MainActivity

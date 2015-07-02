@@ -45,12 +45,15 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
+
+        String time="";
         String message = data.getString("message");
         String message2="";
         String user="";
         try {
             response = new JSONObject(message);
-            user = response.getString("message");
+            time = response.getString("hour");
+            user = response.getString("name");
             message2 = user+" te ha invitado a una nueva reserva de Biblioteca";
         } catch (JSONException e) {
             e.printStackTrace();
@@ -69,7 +72,7 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message2,user);
+        sendNotification(message2,user,time);
     }
     // [END receive_message]
 
@@ -78,9 +81,10 @@ public class MyGcmListenerService extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message, String user) {
+    private void sendNotification(String message, String user, String time) {
         Intent intent = new Intent(this, Confirmacion.class);
         intent.putExtra("user",user);
+        intent.putExtra("time",time);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

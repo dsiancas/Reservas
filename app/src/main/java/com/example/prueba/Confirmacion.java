@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Confirmacion extends Activity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<People.LoadPeopleResult> {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 	private String emisor = "Juan Aguirre";
 	private String tiempo = "12:30";
 
@@ -55,14 +55,19 @@ public class Confirmacion extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.confirm);
 
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null) {
+            emisor = extras.getString("user");
+            tiempo = extras.getString("time");
+        }
 
-		emisor = getIntent().getStringExtra("name");
+		//emisor = getIntent().getStringExtra("name");
         ab = (Button) findViewById(R.id.button1);
 		TextView sender = (TextView) findViewById(R.id.textView18);
 		TextView time = (TextView) findViewById(R.id.textView20);
 		
 		sender.setText(sender.getText().toString()+emisor);
-		time.setText(time.getText().toString()+tiempo);
+		time.setText(time.getText().toString() + tiempo);
 
         mGoogleApiClient = buildGoogleApiClient();
 	}
@@ -101,51 +106,18 @@ public class Confirmacion extends Activity implements
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
-        switch (requestCode) {
-            case RC_SIGN_IN:
-                if (resultCode == RESULT_OK) {
-                    // If the error resolution was successful we should continue
-                    // processing errors.
-                    mSignInProgress = STATE_SIGN_IN;
-                } else {
-                    // If the error resolution was not successful or the user canceled,
-                    // we should stop processing errors.
-                    mSignInProgress = STATE_DEFAULT;
-                }
-
-                if (!mGoogleApiClient.isConnecting()) {
-                    // If Google Play services resolved the issue with a dialog then
-                    // onStart is not called so we need to re-attempt connection here.
-                    mGoogleApiClient.connect();
-                }
-                break;
-        }
-    }
-
-    public static String remove2(String input) {
-        // Descomposición canónica
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
-        // Nos quedamos únicamente con los caracteres ASCII
-        Pattern pattern = Pattern.compile("\\P{ASCII}+");
-        return pattern.matcher(normalized).replaceAll("");
-    }//remove2
-
-    @Override
     public void onConnected(Bundle bundle) {
         if (!mGoogleApiClient.isConnecting()) {
-            /*Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-            //Log.i("taag","dsadsa");
-            Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
-                    .setResultCallback(this);*/
+            final Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            //Log.i("taag",currentUser.getName().toString());
 
             ab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new SendAccept().execute();
+                    new SendAccept(currentUser).execute();
                 }
             });
+
         }
     }
 
@@ -159,28 +131,6 @@ public class Confirmacion extends Activity implements
 
     }
 
-    @Override
-    public void onResult(People.LoadPeopleResult peopleData) {
-
-        if (peopleData.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-            //mCirclesList.clear();
-            /*PersonBuffer personBuffer = peopleData.getPersonBuffer();
-            try {
-                int count = personBuffer.getCount();
-                for (int i = 0; i < count; i++) {
-                    //Log.i("taag", personBuffer.get(i).getDisplayName());
-                    mCirclesList.add(personBuffer.get(i).getDisplayName());
-                }
-            } finally {
-                personBuffer.close();
-            }
-
-            mCirclesAdapter.notifyDataSetChanged();*/
-        } else {
-            Log.e("TAG", "Error requesting visible circles: " + peopleData.getStatus());
-        }
-    }
-
 
     private class SendAccept extends AsyncTask<Void, Void, String> {
 
@@ -189,6 +139,11 @@ public class Confirmacion extends Activity implements
         HttpPost httppost2;
         List<NameValuePair> nameValuePairs2;
         HttpResponse response2;
+        Person currentPerson;
+
+        public SendAccept(Person user) {
+            currentPerson=user;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -204,21 +159,22 @@ public class Confirmacion extends Activity implements
             try {
 
                 //for(String i: items) {
-
+                httpclient2 = new DefaultHttpClient();
                 httppost2 = new HttpPost("http://ubika.tk/service.php"); // make sure the url is correct.
                 //add your data
                 nameValuePairs2 = new ArrayList<NameValuePair>(2);
                 // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
                 String hour = "12:12";// tp.getCurrentHour().toString()+":"+ tp.getCurrentMinute().toString();
 
-                nameValuePairs2.add(new BasicNameValuePair("name", emisor));  // $Edittext_value = $_POST['Edittext_value'];
+                nameValuePairs2.add(new BasicNameValuePair("name", "d"));  // $Edittext_value = $_POST['Edittext_value'];
+                nameValuePairs2.add(new BasicNameValuePair("emisor", "dsadsA"));
                 nameValuePairs2.add(new BasicNameValuePair("hour", hour));
                 httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
                 //Execute HTTP Post Request
                 response2 = httpclient2.execute(httppost2);
                 // edited by James from coderzheaven.. from here....
                 ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                final String response = httpclient2.execute(httppost2, responseHandler);
+                String response = httpclient2.execute(httppost2, responseHandler);
                 System.out.println("Response : " + response);
                 //}
             } catch (Exception e) {
@@ -227,6 +183,14 @@ public class Confirmacion extends Activity implements
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+			/*Context context = getApplicationContext();
+			Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
+			toast.show();
+			mactv.setEnabled(true);*/
         }
     }
 }

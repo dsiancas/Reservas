@@ -226,8 +226,10 @@ public class Agregar extends Activity implements
                     nameValuePairs2 = new ArrayList<NameValuePair>(2);
                     // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
                     String hour = tp.getCurrentHour().toString()+":"+ tp.getCurrentMinute().toString();
-
-                    nameValuePairs2.add(new BasicNameValuePair("name", i));  // $Edittext_value = $_POST['Edittext_value'];
+                    Log.d("hora",hour);
+                    //nameValuePairs2.add(new BasicNameValuePair("name", i));  // $Edittext_value = $_POST['Edittext_value'];
+                    nameValuePairs2.add(new BasicNameValuePair("name", "d"));  // $Edittext_value = $_POST['Edittext_value'];
+                    nameValuePairs2.add(new BasicNameValuePair("emisor", "Daniel Siancas"));  // $Edittext_value = $_POST['Edittext_value'];
                     nameValuePairs2.add(new BasicNameValuePair("hour", hour));
                     httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
                     //Execute HTTP Post Request

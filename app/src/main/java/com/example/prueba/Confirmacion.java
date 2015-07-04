@@ -105,6 +105,14 @@ public class Confirmacion extends Activity implements
         return builder.build();
     }
 
+    public static String remove2(String input) {
+        // Descomposición canónica
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        // Nos quedamos únicamente con los caracteres ASCII
+        Pattern pattern = Pattern.compile("\\P{ASCII}+");
+        return pattern.matcher(normalized).replaceAll("");
+    }//remove2
+
     @Override
     public void onConnected(Bundle bundle) {
         if (!mGoogleApiClient.isConnecting()) {
@@ -167,7 +175,7 @@ public class Confirmacion extends Activity implements
                 String hour = "12:12";// tp.getCurrentHour().toString()+":"+ tp.getCurrentMinute().toString();
 
                 nameValuePairs2.add(new BasicNameValuePair("name", "d"));  // $Edittext_value = $_POST['Edittext_value'];
-                nameValuePairs2.add(new BasicNameValuePair("emisor", "dsadsA"));
+                nameValuePairs2.add(new BasicNameValuePair("emisor", remove2(currentPerson.getDisplayName())));
                 nameValuePairs2.add(new BasicNameValuePair("hour", hour));
                 httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
                 //Execute HTTP Post Request
@@ -176,6 +184,19 @@ public class Confirmacion extends Activity implements
                 ResponseHandler<String> responseHandler = new BasicResponseHandler();
                 String response = httpclient2.execute(httppost2, responseHandler);
                 System.out.println("Response : " + response);
+
+                httpclient2 = new DefaultHttpClient();
+                httppost2 = new HttpPost("http://ubika.tk/autonomous.php");
+                nameValuePairs2.clear();
+                nameValuePairs2.add(new BasicNameValuePair("email", "d"));
+                nameValuePairs2.add(new BasicNameValuePair("name", "d"));
+                httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+                response2 = httpclient2.execute(httppost2);
+                //ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                response = httpclient2.execute(httppost2, responseHandler);
+                System.out.println("Response : " + response);
+
+
                 //}
             } catch (Exception e) {
                 System.out.println("Exception : " + e.getMessage());

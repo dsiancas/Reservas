@@ -50,10 +50,14 @@ public class MyGcmListenerService extends GcmListenerService {
         String message = data.getString("message");
         String message2="";
         String user="";
+        String men="";
+        String hr="";
         try {
             response = new JSONObject(message);
             time = response.getString("hour");
             user = response.getString("name");
+            men = response.getString("msg");
+            hr=response.getString("id");
             message2 = user+" te ha invitado a una nueva reserva de Biblioteca";
         } catch (JSONException e) {
             e.printStackTrace();
@@ -72,7 +76,7 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message2,user,time);
+        sendNotification(message2,user,time,men,hr);
     }
     // [END receive_message]
 
@@ -81,10 +85,11 @@ public class MyGcmListenerService extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message, String user, String time) {
+    private void sendNotification(String message, String user, String time,String men,String hr) {
         Intent intent = new Intent(this, Confirmacion.class);
         intent.putExtra("user",user);
         intent.putExtra("time",time);
+        intent.putExtra("hr",hr);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -93,7 +98,7 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.book)
                 .setContentTitle("Biblioteca")
-                .setContentText(message)
+                .setContentText(men)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

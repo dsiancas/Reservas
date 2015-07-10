@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/RelativeLayout1"
     android:layout_width="wrap_content"
@@ -8,105 +8,43 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/back"
     tools:context=".MainActivity" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="2dip">
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:padding="2dip"
+        android:id="@+id/relativeLayout2">
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dip"
+
             android:enabled="false" />
 
-        <Button
-            android:id="@+id/sign_out_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sign_out_button_name"
-            android:enabled="false" />
-
-        <Button
-            android:id="@+id/revoke_access_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/revoke_access_button_name"
-            android:enabled="false" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
-        android:id="@+id/sign_in_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dip"
-        android:text="@string/status_signed_out" />
+        android:text="Biblioteca UCSP"
+        android:id="@+id/titulo"
+        android:textColor="#fff9f7ff"
+        android:textSize="28sp"
+        android:fontFamily="sans-serif"
+        android:background="#dd4b39"
+        android:textIsSelectable="true"
+        android:padding="10dp"
+        android:layout_marginTop="68dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
-
-    <LinearLayout
-        android:id="@+id/layout_server_auth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/request_server_auth_code" />
-
-            <CheckBox
-                android:id="@+id/request_auth_code_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_has_token"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="invisible"
-            tools:visibility="visible">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mock_server_has_token" />
-
-            <CheckBox
-                android:id="@+id/has_token_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/circles_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/circles_title"
-        android:layout_marginTop="20dp" />
-
-    <ListView
-        android:id="@+id/circles_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="0dip" />
 
     <!--
     <android.support.v7.widget.Space
@@ -179,5 +117,5 @@
         android:text="Ingresar" />
         -->
 
-</LinearLayout>
+</RelativeLayout>
 <!-- From: file:/C:/UBI/Reservas/app/src/main/res/layout/activity_main.xml -->

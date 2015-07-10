@@ -37,8 +37,9 @@ import java.util.regex.Pattern;
 
 public class Confirmacion extends Activity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-	private String emisor = "Juan Aguirre";
-	private String tiempo = "12:30";
+	private String emisor = "No hay reservas pendientes";
+	private String tiempo = "--:--";
+    private String hr = "";
 
     private GoogleApiClient mGoogleApiClient;
     private ArrayList<String> mCirclesList;
@@ -47,6 +48,7 @@ public class Confirmacion extends Activity implements
     private int mSignInProgress;
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
+    Person currentUser;
 
     private Button ab;
 	
@@ -59,10 +61,12 @@ public class Confirmacion extends Activity implements
         if(extras !=null) {
             emisor = extras.getString("user");
             tiempo = extras.getString("time");
+            hr = extras.getString("hr");
         }
 
 		//emisor = getIntent().getStringExtra("name");
         ab = (Button) findViewById(R.id.button1);
+        ab.setEnabled(false);
 		TextView sender = (TextView) findViewById(R.id.textView18);
 		TextView time = (TextView) findViewById(R.id.textView20);
 		
@@ -116,12 +120,13 @@ public class Confirmacion extends Activity implements
     @Override
     public void onConnected(Bundle bundle) {
         if (!mGoogleApiClient.isConnecting()) {
-            final Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
             //Log.i("taag",currentUser.getName().toString());
-
+            ab.setEnabled(true);
             ab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     new SendAccept(currentUser).execute();
                 }
             });
@@ -155,6 +160,7 @@ public class Confirmacion extends Activity implements
 
         @Override
         protected void onPreExecute() {
+            ab.setEnabled(true);
             //mactv.setEnabled(false);
         }
 
@@ -165,7 +171,7 @@ public class Confirmacion extends Activity implements
             //List<String> items = Arrays.asList(stringEditText.split("\\s*,\\s*"));
             //items.add("Daniel Jesus Siancas Salas");
             try {
-
+                ab.setEnabled(true);
                 //for(String i: items) {
                 httpclient2 = new DefaultHttpClient();
                 httppost2 = new HttpPost("http://ubika.tk/service.php"); // make sure the url is correct.
@@ -174,27 +180,48 @@ public class Confirmacion extends Activity implements
                 // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
                 String hour = "12:12";// tp.getCurrentHour().toString()+":"+ tp.getCurrentMinute().toString();
 
-                nameValuePairs2.add(new BasicNameValuePair("name", "d"));  // $Edittext_value = $_POST['Edittext_value'];
+                nameValuePairs2.add(new BasicNameValuePair("name", remove2(emisor)));  // $Edittext_value = $_POST['Edittext_value'];
                 nameValuePairs2.add(new BasicNameValuePair("emisor", remove2(currentPerson.getDisplayName())));
                 nameValuePairs2.add(new BasicNameValuePair("hour", hour));
+                nameValuePairs2.add(new BasicNameValuePair("msg", remove2(currentPerson.getDisplayName())+" ha aceptado tu invitacion de reserva en Biblioteca."));
                 httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
                 //Execute HTTP Post Request
-                response2 = httpclient2.execute(httppost2);
+                //response2 = httpclient2.execute(httppost2);
                 // edited by James from coderzheaven.. from here....
                 ResponseHandler<String> responseHandler = new BasicResponseHandler();
                 String response = httpclient2.execute(httppost2, responseHandler);
                 System.out.println("Response : " + response);
 
+
                 httpclient2 = new DefaultHttpClient();
-                httppost2 = new HttpPost("http://ubika.tk/autonomous.php");
+                httppost2 = new HttpPost("http://ubika.tk/update.php");
                 nameValuePairs2.clear();
-                nameValuePairs2.add(new BasicNameValuePair("email", "d"));
-                nameValuePairs2.add(new BasicNameValuePair("name", "d"));
+                nameValuePairs2.add(new BasicNameValuePair("email", remove2(emisor)));
+                nameValuePairs2.add(new BasicNameValuePair("name", remove2(emisor)));
+                nameValuePairs2.add(new BasicNameValuePair("hr", hr));
+                nameValuePairs2.add(new BasicNameValuePair("msg", "La reserva en Biblioteca ha sido confirmada por todos. Llegar 5 min antes."));
                 httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
-                response2 = httpclient2.execute(httppost2);
+                //response2 = httpclient2.execute(httppost2);
                 //ResponseHandler<String> responseHandler = new BasicResponseHandler();
                 response = httpclient2.execute(httppost2, responseHandler);
                 System.out.println("Response : " + response);
+
+
+                httpclient2 = new DefaultHttpClient();
+                httppost2 = new HttpPost("http://ubika.tk/autonomous.php");
+                nameValuePairs2.clear();
+                nameValuePairs2.add(new BasicNameValuePair("email", remove2(emisor)));
+                nameValuePairs2.add(new BasicNameValuePair("name", remove2(emisor)));
+                nameValuePairs2.add(new BasicNameValuePair("hr", hr));
+                nameValuePairs2.add(new BasicNameValuePair("msg", "La reserva en Biblioteca ha sido confirmada por todos. Llegar 5 min antes."));
+                httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+                //response2 = httpclient2.execute(httppost2);
+                //ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                response = httpclient2.execute(httppost2, responseHandler);
+                System.out.println("Response : " + response);
+
+                //
+
 
 
                 //}
@@ -212,6 +239,9 @@ public class Confirmacion extends Activity implements
 			Toast toast = Toast.makeText(context, result, Toast.LENGTH_LONG);
 			toast.show();
 			mactv.setEnabled(true);*/
+            ab.setEnabled(false);
+            Intent intent = new Intent(Confirmacion.this, Menu.class);
+            startActivity(intent);
         }
     }
 }

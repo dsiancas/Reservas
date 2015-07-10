@@ -109,7 +109,7 @@ public class RegistrationIntentService extends IntentService {
      * Modify this method to associate the user's GCM registration token with any server-side account
      * maintained by your application.
      *
-     * @param token The new token.
+     *
      */
 
     public static String remove2(String input) {
@@ -139,6 +139,7 @@ public class RegistrationIntentService extends IntentService {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             final String response = httpclient.execute(httppost, responseHandler);
             System.out.println("Response : " + response);
+            httppost.getEntity().consumeContent();
 
         }catch(Exception e){
             System.out.println("Exception : " + e.getMessage());

@@ -1,65 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/back">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Biblioteca"
-        android:id="@+id/textView4"
-        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp"
-        android:textSize="40dp" />
+        android:layout_centerVertical="true"
+        android:padding="2dip" >
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reservar Sala"
-        android:layout_below="@+id/welcome"
-        android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Biblioteca UCSP"
+            android:id="@+id/titulo"
+            android:textColor="#737373"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif"
+            android:background="@drawable/but"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Confirmar Sala"
-        android:layout_below="@+id/button2"
-        android:layout_alignStart="@+id/button2" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/welcome"
+            android:padding="10dp"
+            android:textColor="#737373"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:background="@drawable/but"
+            android:layout_below="@+id/titulo"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="Bienvenido" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/welcome"
-        android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true" />
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:textColor="#737373"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/but"
+            android:text="Reservar Sala"
+            android:gravity="center|center_horizontal"
+            android:fontFamily="sans-serif"
+            android:layout_below="@+id/welcome"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Salir"
-        android:id="@+id/logout"
-        android:layout_below="@+id/button3"
-        android:layout_centerHorizontal="true" />
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="#737373"
+            android:background="@drawable/but"
+            android:gravity="center|center_horizontal"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:text="Confirmar Sala"
+            android:layout_below="@+id/button2"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_alignLeft="@+id/button2"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp" />
 
-    <TextView
-        android:text="@string/registering_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/informationTextView"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/logout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp" />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/registrationProgressBar"
-        android:layout_below="@+id/informationTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp" />
 
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salir"
+            android:textColor="#737373"
+            android:padding="10dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:background="@drawable/but"
+            android:id="@+id/logout"
+            android:layout_below="@+id/button3"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp" />
+
+
+        <!--
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/registrationProgressBar"
+                    android:layout_below="@+id/informationTextView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="47dp" />
+                    -->
+    </RelativeLayout>
 </RelativeLayout><!-- From: file:/C:/UBI/Reservas/app/src/main/res/layout/menu.xml -->

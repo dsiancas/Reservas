@@ -1,6 +1,7 @@
 package com.example.prueba;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,12 +21,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -44,6 +49,12 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.google.android.gms.plus.People.LoadPeopleResult;
 
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+//import org.json.simple.JSONValue;
+//import org.json.simple.parser.JSONParser;
+
 public class Agregar extends Activity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<LoadPeopleResult> {
 	private MultiAutoCompleteTextView mactv;
@@ -52,24 +63,47 @@ public class Agregar extends Activity implements
     private ArrayList<String> mCirclesList;
     private ArrayAdapter<String> mCirclesAdapter;
     private static final int RC_SIGN_IN = 0;
+    private static final String TAG_SUCCESS = "success";
     private int mSignInProgress;
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private Button send;
+    private static final String url_reservar = "http://www.ubika.tk/reservar.php?";
     private TimePicker tp;
+    Person currentUser;
 
     HttpClient httpclient2;
     HttpPost httppost2;
     List<NameValuePair> nameValuePairs2;
     HttpResponse response2;
+    Button retro;
+    private String sala;
+    private String hourr;
+    private String text_hour;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.refer);
 
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null) {
+            sala = extras.getString("salaID");
+            hourr = extras.getString("hora");
+            text_hour = extras.getString("texto");
+        }
+
         send = (Button) findViewById(R.id.button1);
-        tp = (TimePicker) findViewById(R.id.timePicker1);
+        retro = (Button) findViewById(R.id.back);
+        retro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Agregar.this, Rooms.class);
+                startActivity(intent);
+
+            }
+        });
+
         mCirclesList = new ArrayList<String>();
         mCirclesAdapter = new ArrayAdapter<String>(
                 this, R.layout.circle_member, mCirclesList);
@@ -156,7 +190,7 @@ public class Agregar extends Activity implements
     @Override
     public void onConnected(Bundle bundle) {
         if (!mGoogleApiClient.isConnecting()) {
-            Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+            currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
             //Log.i("taag","dsadsa");
             Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
                     .setResultCallback(this);
@@ -204,40 +238,102 @@ public class Agregar extends Activity implements
 
     private class Notify extends AsyncTask<Void, Void, String> {
 
-		private String URL = "http://ubicom.pe.hu/getUsuarios.php";
+        private String URL = "http://ubicom.pe.hu/getUsuarios.php";
+        private String res="";
 
 		@Override
 		protected void onPreExecute() {
 			//mactv.setEnabled(false);
 		}
-		
+
+        private final Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                if(msg.arg1 == 1) {
+                    //Toast.makeText(getApplicationContext(),"Your message", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(getApplicationContext(), res, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                    toast.show();
+                }
+            }
+        };
+
 		@Override
 		protected String doInBackground(Void... params) {
             String stringEditText = mactv.getText().toString();
             //Log.i("dsadsa",stringEditText);
             List<String> items = Arrays.asList(stringEditText.split("\\s*,\\s*"));
+            nameValuePairs2 = new ArrayList<>(2);
             //items.add("Daniel Jesus Siancas Salas");
             try{
+                httpclient2 = new DefaultHttpClient();
+                httppost2 = new HttpPost("http://ubika.tk/reservar.php");
+                //String hour = tp.getCurrentHour().toString();
+                //String hour = "2";
+                //hour = String.valueOf(temp);
+                String hour2 = "3";
+                String leader = currentUser.getDisplayName();
+                String members = stringEditText;
+                //String cant = String.valueOf(items.size()+1);
+                String cant="1";
+                nameValuePairs2.clear();
+                nameValuePairs2.add(new BasicNameValuePair("sala", sala));
+                nameValuePairs2.add(new BasicNameValuePair("hour", hourr));
+                nameValuePairs2.add(new BasicNameValuePair("leader", remove2(leader)));
+                nameValuePairs2.add(new BasicNameValuePair("members", remove2(members)));
+                nameValuePairs2.add(new BasicNameValuePair("cant", cant));
+                httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
+                ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                //response2 = httpclient2.execute(httppost2);
+
+                //
+                String response = httpclient2.execute(httppost2, responseHandler);
+                System.out.println("Response : " + response);
+                res= response;
+
+                Message msg = handler.obtainMessage();
+                msg.arg1 = 1;
+                handler.sendMessage(msg);
 
                 for(String i: items) {
                     httpclient2 = new DefaultHttpClient();
                     httppost2 = new HttpPost("http://ubika.tk/service.php"); // make sure the url is correct.
                     //add your data
-                    nameValuePairs2 = new ArrayList<NameValuePair>(2);
+                    nameValuePairs2.clear();
                     // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,
-                    String hour = tp.getCurrentHour().toString()+":"+ tp.getCurrentMinute().toString();
+
+                    //double tempmin =  (((tp.getCurrentHour()+(double)tp.getCurrentMinute()/60)*3600)-30600)/1800;
+                    //int temp = (int)tempmin;
+                    //if(tempmin-temp>0) temp++;
+                    //String hour = String.valueOf(temp);
+                    //String hour=tp.getCurrentHour().toString()+":"+tp.getCurrentMinute().toString();
 
                     //nameValuePairs2.add(new BasicNameValuePair("name", i));  // $Edittext_value = $_POST['Edittext_value'];
-                    nameValuePairs2.add(new BasicNameValuePair("name", "d"));  // $Edittext_value = $_POST['Edittext_value'];
-                    nameValuePairs2.add(new BasicNameValuePair("emisor", "Daniel Siancas"));  // $Edittext_value = $_POST['Edittext_value'];
-                    nameValuePairs2.add(new BasicNameValuePair("hour", hour));
+                    nameValuePairs2.add(new BasicNameValuePair("name", remove2(i)));  // $Edittext_value = $_POST['Edittext_value'];
+                    nameValuePairs2.add(new BasicNameValuePair("emisor", remove2(currentUser.getDisplayName())));  // $Edittext_value = $_POST['Edittext_value'];
+                    nameValuePairs2.add(new BasicNameValuePair("hour", text_hour));
+                    nameValuePairs2.add(new BasicNameValuePair("id", hourr));
+                    nameValuePairs2.add(new BasicNameValuePair("msg", remove2(currentUser.getDisplayName()) + " te ha invitado a reservar una sala en Biblioteca, hora: "+text_hour));
                     httppost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2));
                     //Execute HTTP Post Request
-                    response2 = httpclient2.execute(httppost2);
+                    //response2 = httpclient2.execute(httppost2);
                     // edited by James from coderzheaven.. from here....
-                    ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                    final String response = httpclient2.execute(httppost2, responseHandler);
+                    //responseHandler = new BasicResponseHandler();
+                    response = httpclient2.execute(httppost2, responseHandler);
                     System.out.println("Response : " + response);
+
+
+                    //httppost2.
+
+
+                    // Building Parameters
+                    /*params = new ArrayList<NameValuePair>();
+                    params.add(new BasicNameValuePair("sala", "1"));
+                    params.add(new BasicNameValuePair("hour", hour));
+                    params.add(new BasicNameValuePair("leader", remove2(leader)));
+                    params.add(new BasicNameValuePair("members", remove2(members)));
+                    params.add(new BasicNameValuePair("cant", cant));
+                    */
+                    //new send_to_server().execute();
                 }
             }catch(Exception e){
                 System.out.println("Exception : " + e.getMessage());
@@ -255,23 +351,5 @@ public class Agregar extends Activity implements
 			mactv.setEnabled(true);*/
 		}
 	}
-	
-	public String getUsers() {
-		String URL = "http://ubicom.pe.hu/getUsuarios.php";
-		
-		AndroidHttpClient mClient = AndroidHttpClient.newInstance("");
-		
-		HttpGet request = new HttpGet(URL);
-		ResponseHandler<String> responseHandler = new BasicResponseHandler();
-		try {
-			return  mClient.execute(request,responseHandler);
-		} catch (ClientProtocolException exception) {
-			exception.printStackTrace();
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-		return null;
-	}
-
 
 }

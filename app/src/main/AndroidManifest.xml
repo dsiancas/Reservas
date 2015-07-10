@@ -46,11 +46,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Rooms"
+            android:name=".Menu"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".Menu"
+            android:name=".Horario"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Rooms"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -78,6 +85,7 @@
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.example.prueba" />
             </intent-filter>
         </service>
         <service

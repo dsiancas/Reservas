@@ -55,11 +55,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.prueba.Rooms"
+            android:name="com.example.prueba.Menu"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.example.prueba.Menu"
+            android:name="com.example.prueba.Horario"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.prueba.Rooms"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -90,6 +97,8 @@
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.example.prueba" />
             </intent-filter>
         </service>
         <service

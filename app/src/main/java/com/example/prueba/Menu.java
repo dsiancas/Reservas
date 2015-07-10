@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -22,8 +24,16 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+
+import java.io.IOException;
 
 public class Menu extends Activity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -31,8 +41,8 @@ public class Menu extends Activity implements
     private GoogleApiClient mGoogleApiClient;
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private ProgressBar mRegistrationProgressBar;
-    private TextView mInformationTextView;
+    //private ProgressBar mRegistrationProgressBar;
+    //private TextView mInformationTextView;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 	@Override
@@ -41,23 +51,23 @@ public class Menu extends Activity implements
 		setContentView(R.layout.menu);
 
          /**/
-        mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
+       // mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
+                //mRegistrationProgressBar.setVisibility(ProgressBar.GONE);
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
                         .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
                 if (sentToken) {
-                    mInformationTextView.setText(getString(R.string.gcm_send_message));
+                    //mInformationTextView.setText(getString(R.string.gcm_send_message));
                 } else {
-                    mInformationTextView.setText(getString(R.string.token_error_message));
+                    //mInformationTextView.setText(getString(R.string.token_error_message));
                 }
             }
         };
-        mInformationTextView = (TextView) findViewById(R.id.informationTextView);
+        //mInformationTextView = (TextView) findViewById(R.id.informationTextView);
 
 
              /**/
@@ -154,8 +164,10 @@ public class Menu extends Activity implements
 
             reservar.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
+                    //Intent intent = new Intent(Menu.this, Agregar.class);
                     Intent intent = new Intent(Menu.this, Rooms.class);
                     startActivity(intent);
+                    //new getRooms().execute();
                 }
             });
             confirmar.setOnClickListener(new OnClickListener() {
@@ -216,4 +228,36 @@ public class Menu extends Activity implements
         return true;
     }
 
+    private class getRooms extends AsyncTask<Void, Void, String> {
+
+        private String URL = "http://www.ubika.tk/salas.php";
+        AndroidHttpClient mClient = AndroidHttpClient.newInstance("");
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            HttpGet request = new HttpGet(URL);
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            try {
+                return mClient.execute(request,responseHandler);
+            } catch (ClientProtocolException exception) {
+                exception.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Intent intent = new Intent(Menu.this, Confirmacion.class);
+            intent.putExtra("data", result);
+            startActivity(intent);
+
+        }
+    }
 }
